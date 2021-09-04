@@ -8,6 +8,7 @@
 #import "SceneDelegate.h"
 #import "MetalViewController.h"
 
+
 @interface SceneDelegate ()
 
 @end
@@ -19,8 +20,16 @@
     // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
     // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
     // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
-    MetalViewController *viewController = [MetalViewController new];
-    self.window.rootViewController = (MetalViewController *)viewController;
+    
+    _window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
+    UIWindowScene * windowScene = [[UIWindowScene alloc] initWithSession:session connectionOptions:connectionOptions];
+    [_window setWindowScene:windowScene];
+    
+    MetalViewController * metalViewController = [[MetalViewController alloc] init];
+    [_window setRootViewController:metalViewController];
+    [_window makeKeyAndVisible];
+    
+    
 }
 
 

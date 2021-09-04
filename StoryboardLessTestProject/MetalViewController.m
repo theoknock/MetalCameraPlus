@@ -29,17 +29,23 @@
     [self.view setDevice:self.view.preferredDevice];
     [self.view setFramebufferOnly:FALSE];
     
+    [self.view.layer setBackgroundColor:[UIColor grayColor].CGColor];
+    ((CAMetalLayer *)self.view.layer).contentsGravity = kCAGravityResizeAspectFill;
+    ((CAMetalLayer *)self.view.layer).contentsScale= [[UIScreen mainScreen] nativeScale];
+    ((CAMetalLayer *)self.view.layer).pixelFormat = MTLPixelFormatBGRA8Unorm;
+    ((CAMetalLayer *)self.view.layer).framebufferOnly = YES;
+    
     renderer = [[MetalRenderer alloc] initWithMetalKitView:self.view];
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end
