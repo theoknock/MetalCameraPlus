@@ -14,10 +14,15 @@
 		B940B12826DD579A00D83F2F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B940B12726DD579A00D83F2F /* Assets.xcassets */; };
 		B940B12B26DD579A00D83F2F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B940B12926DD579A00D83F2F /* LaunchScreen.storyboard */; };
 		B940B12E26DD579A00D83F2F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B940B12D26DD579A00D83F2F /* main.m */; };
+		B940B13626DD840500D83F2F /* MetalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B940B13526DD840500D83F2F /* MetalViewController.m */; };
+		B9F0028726E2CA0D00AF416D /* VideoCamera.m in Sources */ = {isa = PBXBuildFile; fileRef = B9F0027F26E2CA0C00AF416D /* VideoCamera.m */; };
+		B9F0028826E2CA0D00AF416D /* GlobalDispatch.c in Sources */ = {isa = PBXBuildFile; fileRef = B9F0028226E2CA0C00AF416D /* GlobalDispatch.c */; };
+		B9F0028926E2CA0D00AF416D /* MetalShaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = B9F0028326E2CA0C00AF416D /* MetalShaders.metal */; };
+		B9F0028A26E2CA0D00AF416D /* MetalRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = B9F0028626E2CA0D00AF416D /* MetalRenderer.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		B940B11826DD579800D83F2F /* StoryboardLessTestProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StoryboardLessTestProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B940B11826DD579800D83F2F /* StoryboardlessMetalCamera.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StoryboardlessMetalCamera.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B940B11B26DD579800D83F2F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		B940B11C26DD579800D83F2F /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		B940B11E26DD579800D83F2F /* SceneDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
@@ -29,6 +34,16 @@
 		B940B12A26DD579A00D83F2F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B940B12C26DD579A00D83F2F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B940B12D26DD579A00D83F2F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		B940B13426DD840500D83F2F /* MetalViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MetalViewController.h; path = StoryboardLessTestProject/MetalViewController.h; sourceTree = "<group>"; };
+		B940B13526DD840500D83F2F /* MetalViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MetalViewController.m; path = StoryboardLessTestProject/MetalViewController.m; sourceTree = "<group>"; };
+		B9F0027F26E2CA0C00AF416D /* VideoCamera.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoCamera.m; sourceTree = "<group>"; };
+		B9F0028026E2CA0C00AF416D /* MetalShaderTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MetalShaderTypes.h; sourceTree = "<group>"; };
+		B9F0028126E2CA0C00AF416D /* GlobalDispatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlobalDispatch.h; sourceTree = "<group>"; };
+		B9F0028226E2CA0C00AF416D /* GlobalDispatch.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = GlobalDispatch.c; sourceTree = "<group>"; };
+		B9F0028326E2CA0C00AF416D /* MetalShaders.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = MetalShaders.metal; sourceTree = "<group>"; };
+		B9F0028426E2CA0C00AF416D /* VideoCamera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoCamera.h; sourceTree = "<group>"; };
+		B9F0028526E2CA0C00AF416D /* MetalRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MetalRenderer.h; sourceTree = "<group>"; };
+		B9F0028626E2CA0D00AF416D /* MetalRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MetalRenderer.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,6 +60,8 @@
 		B940B10F26DD579800D83F2F = {
 			isa = PBXGroup;
 			children = (
+				B940B13426DD840500D83F2F /* MetalViewController.h */,
+				B940B13526DD840500D83F2F /* MetalViewController.m */,
 				B940B11A26DD579800D83F2F /* StoryboardLessTestProject */,
 				B940B11926DD579800D83F2F /* Products */,
 			);
@@ -53,7 +70,7 @@
 		B940B11926DD579800D83F2F /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				B940B11826DD579800D83F2F /* StoryboardLessTestProject.app */,
+				B940B11826DD579800D83F2F /* StoryboardlessMetalCamera.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -72,6 +89,14 @@
 				B940B12926DD579A00D83F2F /* LaunchScreen.storyboard */,
 				B940B12C26DD579A00D83F2F /* Info.plist */,
 				B940B12D26DD579A00D83F2F /* main.m */,
+				B9F0028226E2CA0C00AF416D /* GlobalDispatch.c */,
+				B9F0028126E2CA0C00AF416D /* GlobalDispatch.h */,
+				B9F0028526E2CA0C00AF416D /* MetalRenderer.h */,
+				B9F0028626E2CA0D00AF416D /* MetalRenderer.m */,
+				B9F0028326E2CA0C00AF416D /* MetalShaders.metal */,
+				B9F0028026E2CA0C00AF416D /* MetalShaderTypes.h */,
+				B9F0028426E2CA0C00AF416D /* VideoCamera.h */,
+				B9F0027F26E2CA0C00AF416D /* VideoCamera.m */,
 			);
 			path = StoryboardLessTestProject;
 			sourceTree = "<group>";
@@ -79,9 +104,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		B940B11726DD579800D83F2F /* StoryboardLessTestProject */ = {
+		B940B11726DD579800D83F2F /* StoryboardlessMetalCamera */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B940B13126DD579A00D83F2F /* Build configuration list for PBXNativeTarget "StoryboardLessTestProject" */;
+			buildConfigurationList = B940B13126DD579A00D83F2F /* Build configuration list for PBXNativeTarget "StoryboardlessMetalCamera" */;
 			buildPhases = (
 				B940B11426DD579800D83F2F /* Sources */,
 				B940B11526DD579800D83F2F /* Frameworks */,
@@ -91,9 +116,9 @@
 			);
 			dependencies = (
 			);
-			name = StoryboardLessTestProject;
+			name = StoryboardlessMetalCamera;
 			productName = StoryboardLessTestProject;
-			productReference = B940B11826DD579800D83F2F /* StoryboardLessTestProject.app */;
+			productReference = B940B11826DD579800D83F2F /* StoryboardlessMetalCamera.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -110,7 +135,7 @@
 					};
 				};
 			};
-			buildConfigurationList = B940B11326DD579800D83F2F /* Build configuration list for PBXProject "StoryboardLessTestProject" */;
+			buildConfigurationList = B940B11326DD579800D83F2F /* Build configuration list for PBXProject "StoryboardlessMetalCamera" */;
 			compatibilityVersion = "Xcode 13.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -123,7 +148,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				B940B11726DD579800D83F2F /* StoryboardLessTestProject */,
+				B940B11726DD579800D83F2F /* StoryboardlessMetalCamera */,
 			);
 		};
 /* End PBXProject section */
@@ -146,9 +171,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B9F0028926E2CA0D00AF416D /* MetalShaders.metal in Sources */,
+				B9F0028726E2CA0D00AF416D /* VideoCamera.m in Sources */,
+				B9F0028A26E2CA0D00AF416D /* MetalRenderer.m in Sources */,
+				B9F0028826E2CA0D00AF416D /* GlobalDispatch.c in Sources */,
 				B940B12326DD579800D83F2F /* ViewController.m in Sources */,
 				B940B11D26DD579800D83F2F /* AppDelegate.m in Sources */,
 				B940B12E26DD579A00D83F2F /* main.m in Sources */,
+				B940B13626DD840500D83F2F /* MetalViewController.m in Sources */,
 				B940B12026DD579800D83F2F /* SceneDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -297,9 +327,9 @@
 				DEVELOPMENT_TEAM = N9987K9442;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = StoryboardLessTestProject/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = StoryboardlessMetalCamera;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -324,9 +354,9 @@
 				DEVELOPMENT_TEAM = N9987K9442;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = StoryboardLessTestProject/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = StoryboardlessMetalCamera;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -344,7 +374,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		B940B11326DD579800D83F2F /* Build configuration list for PBXProject "StoryboardLessTestProject" */ = {
+		B940B11326DD579800D83F2F /* Build configuration list for PBXProject "StoryboardlessMetalCamera" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B940B12F26DD579A00D83F2F /* Debug */,
@@ -353,7 +383,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		B940B13126DD579A00D83F2F /* Build configuration list for PBXNativeTarget "StoryboardLessTestProject" */ = {
+		B940B13126DD579A00D83F2F /* Build configuration list for PBXNativeTarget "StoryboardlessMetalCamera" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B940B13226DD579A00D83F2F /* Debug */,
