@@ -29,38 +29,14 @@
     if (self = [super init])
     {
         CGSize video_dimensions = [[VideoCamera setAVCaptureVideoDataOutputSampleBufferDelegate:(id<AVCaptureVideoDataOutputSampleBufferDelegate>)self] videoDimensions];
-        create_texture = ^ (CVMetalTextureCacheRef texture_cache_ref) {
+        create_texture = ^ {
             MTLPixelFormat pixelFormat = view.colorPixelFormat;
-            CFStringRef textureCacheKeys[2] = {kCVMetalTextureCacheMaximumTextureAgeKey, kCVMetalTextureUsage};
+            CFStringRef textureCacheKeys[2] = { kCVMetalTextureCacheMaximumTextureAgeKey, kCVMetalTextureUsage };
             float maximumTextureAge = (1.0); // / view.preferredFramesPerSecond);
             CFNumberRef maximumTextureAgeValue = CFNumberCreate(kCFAllocatorDefault, kCFNumberFloatType, &maximumTextureAge);
             MTLTextureUsage textureUsage = MTLTextureUsageShaderRead;
             CFNumberRef textureUsageValue = CFNumberCreate(NULL, kCFNumberNSIntegerType, &textureUsage);
-            CFTypeRef textureCacheValues[2] = {maximumTextureAgeValue, textureUsageValue};
-            CFIndex textureCacheAttributesCount = 2;
-            CFDictionaryRef cacheAttributes = CFDictionaryCreate(NULL, (const void **)textureCacheKeys, (const void **)textureCacheValues, textureCacheAttributesCount, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
-            
-            return ^ id<MTLTexture> _Nonnull (CVPixelBufferRef pixel_buffer) {
-                @autoreleasepool {
-                    __autoreleasing id<MTLTexture> texture = nil;
-                    CVPixelBufferLockBaseAddress(pixel_buffer, kCVPixelBufferLock_ReadOnly);
-                    {
-                        CVMetalTextureRef metalTextureRef = NULL;
-                        CVMetalTextureCacheCreateTextureFromImage(NULL, texture_cache_ref, pixel_buffer, cacheAttributes, pixelFormat, CVPixelBufferGetWidth(pixel_buffer), CVPixelBufferGetHeight(pixel_buffer), 0, &metalTextureRef);
-                        texture = CVMetalTextureGetTexture(metalTextureRef);
-                        CFRelease(metalTextureRef);
-                    }
-                    CVPixelBufferUnlockBaseAddress(pixel_buffer, kCVPixelBufferLock_ReadOnly);
-                    return texture;
-                }
-            };
-        }(^ () {
-            CFStringRef textureCacheKeys[2] = {kCVMetalTextureCacheMaximumTextureAgeKey, kCVMetalTextureUsage};
-            float maximumTextureAge = (1.0); // / view.preferredFramesPerSecond);
-            CFNumberRef maximumTextureAgeValue = CFNumberCreate(kCFAllocatorDefault, kCFNumberFloatType, &maximumTextureAge);
-            MTLTextureUsage textureUsage = MTLTextureUsageShaderRead;
-            CFNumberRef textureUsageValue = CFNumberCreate(NULL, kCFNumberNSIntegerType, &textureUsage);
-            CFTypeRef textureCacheValues[2] = {maximumTextureAgeValue, textureUsageValue};
+            CFTypeRef textureCacheValues[2] = { maximumTextureAgeValue, textureUsageValue };
             CFIndex textureCacheAttributesCount = 2;
             CFDictionaryRef cacheAttributes = CFDictionaryCreate(NULL, (const void **)textureCacheKeys, (const void **)textureCacheValues, textureCacheAttributesCount, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
             
@@ -70,8 +46,21 @@
             CFRelease(textureUsageValue);
             CFRelease(cacheAttributes);
             
-            return textureCache;
-        }());
+            return ^ id<MTLTexture> _Nonnull (CVPixelBufferRef pixel_buffer) {
+                @autoreleasepool {
+                    __autoreleasing id<MTLTexture> texture = nil;
+                    CVPixelBufferLockBaseAddress(pixel_buffer, kCVPixelBufferLock_ReadOnly);
+                    {
+                        CVMetalTextureRef metalTextureRef = NULL;
+                        CVMetalTextureCacheCreateTextureFromImage(NULL, textureCache, pixel_buffer, cacheAttributes, pixelFormat, CVPixelBufferGetWidth(pixel_buffer), CVPixelBufferGetHeight(pixel_buffer), 0, &metalTextureRef);
+                        texture = CVMetalTextureGetTexture(metalTextureRef);
+                        CFRelease(metalTextureRef);
+                    }
+                    CVPixelBufferUnlockBaseAddress(pixel_buffer, kCVPixelBufferLock_ReadOnly);
+                    return texture;
+                }
+            };
+        }();
         
         draw_texture = ^ () {
             id<MTLLibrary> defaultLibrary = [view.preferredDevice newDefaultLibrary];
@@ -102,17 +91,6 @@
                                                  mipmapped:FALSE];
             [descriptor setUsage:MTLTextureUsageShaderWrite | MTLTextureUsageShaderRead];
             id<MTLTexture> computeTexture = [view.preferredDevice newTextureWithDescriptor:descriptor];
-            //
-//            static const MetalVertex quadVertices[] =
-//            {
-//                { {  3840,   2160 },  { 0.f, 0.f } },
-//                { { -3840,  -2160 },  { 1.f, 1.f } },
-//                { { -3840,   2160 },  { 0.f, 1.f } },
-//
-//                { {  3840,   2160 },  { 0.f, 0.f } },
-//                { {  3840,  -2160 },  { 1.f, 0.f } },
-//                { { -3840,  -2160 },  { 1.f, 1.f } },
-//            };
             
             float scaleX = 1.0;
             float scaleY = 1.0;
@@ -141,7 +119,9 @@
                  scaleX, -scaleY, 0.0, 1.0,
                 -scaleX, -scaleY, 0.0, 1.0,
             };
-            id<MTLBuffer> vertexCoordBuffer = [view.preferredDevice newBufferWithBytes:vertexData length:(verticesCount * sizeof(float)) options:MTLResourceOptionCPUCacheModeDefault];
+            id<MTLBuffer> vertexCoordBuffer = [view.preferredDevice newBufferWithBytes:vertexData
+                                                                                length:(verticesCount * sizeof(float))
+                                                                               options:MTLResourceOptionCPUCacheModeDefault];
             
             NSUInteger textDataCount = 12;
             float textData[] =
@@ -153,13 +133,9 @@
                 1.0, 0.0,
                 1.0, 1.0,
             };
-            id<MTLBuffer> textCoordBuffer = [view.preferredDevice newBufferWithBytes:textData length:(textDataCount * sizeof(float)) options:MTLResourceOptionCPUCacheModeDefault];
-            
-//            vector_uint2 viewportSize = {1268, 2159};
-            
-//            id<MTLFunction> vertexFunction = [defaultLibrary newFunctionWithName:@"vertexShader"];
-//            id<MTLFunction> fragmentFunction = [defaultLibrary newFunctionWithName:@"samplingShader"];
-            
+            id<MTLBuffer> textCoordBuffer = [view.preferredDevice newBufferWithBytes:textData
+                                                                              length:(textDataCount * sizeof(float))
+                                                                             options:MTLResourceOptionCPUCacheModeDefault];
             id<MTLFunction> vertexFunction   = [defaultLibrary newFunctionWithName:@"vertexPassThrough"];
             id<MTLFunction> fragmentFunction = [defaultLibrary newFunctionWithName:@"fragmentPassThrough"];
                         

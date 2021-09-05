@@ -100,7 +100,7 @@ static VideoCamera * video;
                 {
                     [captureOutput setAutomaticallyConfiguresOutputBufferDimensions:FALSE];
                     [captureOutput setDeliversPreviewSizedOutputBuffers:FALSE];
-                    [videoDataCaptureConnection setVideoOrientation:AVCaptureVideoOrientationPortrait];
+                    [videoDataCaptureConnection setVideoOrientation:AVCaptureVideoOrientationLandscapeLeft];
                     [videoDataCaptureConnection setVideoScaleAndCropFactor:1.0];
                 }
                 
