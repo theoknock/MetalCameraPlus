@@ -28,6 +28,7 @@
 - (nonnull instancetype)initWithMetalKitView:(nonnull MTKView *)view {
     if (self = [super init])
     {
+        // Create a category for MetalViewController to associate video_dimensions as a class property and a required property of a  MetalViewController designated initializer
         CGSize video_dimensions = [[VideoCamera setAVCaptureVideoDataOutputSampleBufferDelegate:(id<AVCaptureVideoDataOutputSampleBufferDelegate>)self] videoDimensions];
         create_texture = ^ {
             MTLPixelFormat pixelFormat = view.colorPixelFormat;
