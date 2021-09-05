@@ -103,22 +103,66 @@
             [descriptor setUsage:MTLTextureUsageShaderWrite | MTLTextureUsageShaderRead];
             id<MTLTexture> computeTexture = [view.preferredDevice newTextureWithDescriptor:descriptor];
             //
-            static const MetalVertex quadVertices[] =
+//            static const MetalVertex quadVertices[] =
+//            {
+//                { {  3840,   2160 },  { 0.f, 0.f } },
+//                { { -3840,  -2160 },  { 1.f, 1.f } },
+//                { { -3840,   2160 },  { 0.f, 1.f } },
+//
+//                { {  3840,   2160 },  { 0.f, 0.f } },
+//                { {  3840,  -2160 },  { 1.f, 0.f } },
+//                { { -3840,  -2160 },  { 1.f, 1.f } },
+//            };
+            
+            float scaleX = 1.0;
+            float scaleY = 1.0;
+            float resizeAspect = 1.0;
+            
+            scaleX = view.bounds.size.width  / video_dimensions.width;
+            scaleY = view.bounds.size.height / video_dimensions.height;
+
+            resizeAspect = fmin(scaleX, scaleY);
+            
+            if (scaleX < scaleY) {
+                scaleY = scaleX / scaleY;
+                scaleX = 1.0;
+            } else {
+                scaleX = scaleY / scaleX;
+                scaleY = 1.0;
+            }
+            
+            NSUInteger verticesCount = 24;
+            float vertexData[] =
             {
-                { {  3840,   2160 },  { 0.f, 0.f } },
-                { { -3840,  -2160 },  { 1.f, 1.f } },
-                { { -3840,   2160 },  { 0.f, 1.f } },
-                
-                { {  3840,   2160 },  { 0.f, 0.f } },
-                { {  3840,  -2160 },  { 1.f, 0.f } },
-                { { -3840,  -2160 },  { 1.f, 1.f } },
+                 scaleX,  scaleY, 0.0, 1.0,
+                -scaleX, -scaleY, 0.0, 1.0,
+                -scaleX,  scaleY, 0.0, 1.0,
+                 scaleX,  scaleY, 0.0, 1.0,
+                 scaleX, -scaleY, 0.0, 1.0,
+                -scaleX, -scaleY, 0.0, 1.0,
             };
+            id<MTLBuffer> vertexCoordBuffer = [view.preferredDevice newBufferWithBytes:vertexData length:(verticesCount * sizeof(float)) options:MTLResourceOptionCPUCacheModeDefault];
             
-            vector_uint2 viewportSize = {2160, 3840};
+            NSUInteger textDataCount = 12;
+            float textData[] =
+            {
+                0.0, 0.0,
+                1.0, 1.0,
+                0.0, 1.0,
+                0.0, 0.0,
+                1.0, 0.0,
+                1.0, 1.0,
+            };
+            id<MTLBuffer> textCoordBuffer = [view.preferredDevice newBufferWithBytes:textData length:(textDataCount * sizeof(float)) options:MTLResourceOptionCPUCacheModeDefault];
             
-            id<MTLFunction> vertexFunction = [defaultLibrary newFunctionWithName:@"vertexShader"];
-            id<MTLFunction> fragmentFunction = [defaultLibrary newFunctionWithName:@"samplingShader"];
+//            vector_uint2 viewportSize = {1268, 2159};
             
+//            id<MTLFunction> vertexFunction = [defaultLibrary newFunctionWithName:@"vertexShader"];
+//            id<MTLFunction> fragmentFunction = [defaultLibrary newFunctionWithName:@"samplingShader"];
+            
+            id<MTLFunction> vertexFunction   = [defaultLibrary newFunctionWithName:@"vertexPassThrough"];
+            id<MTLFunction> fragmentFunction = [defaultLibrary newFunctionWithName:@"fragmentPassThrough"];
+                        
             MTLRenderPipelineDescriptor * renderPipelineStateDescriptor = [[MTLRenderPipelineDescriptor alloc] init];
             renderPipelineStateDescriptor.label = @"Simple Render Pipeline";
             renderPipelineStateDescriptor.vertexFunction = vertexFunction;
@@ -127,7 +171,13 @@
             id<MTLRenderPipelineState> renderPipelineState = [view.preferredDevice newRenderPipelineStateWithDescriptor:renderPipelineStateDescriptor error:&error];
             NSAssert(renderPipelineState, @"Failed to create render pipeline state: %@", error);
             
-            //
+            MTLSamplerDescriptor * samplerDescriptor = [[MTLSamplerDescriptor alloc] init];
+            samplerDescriptor.sAddressMode = MTLSamplerAddressModeClampToEdge;
+            samplerDescriptor.tAddressMode = MTLSamplerAddressModeClampToEdge;
+            samplerDescriptor.minFilter = MTLSamplerMinMagFilterLinear;
+            samplerDescriptor.magFilter = MTLSamplerMinMagFilterLinear;
+            id<MTLSamplerState> samplerState = [view.preferredDevice newSamplerStateWithDescriptor:samplerDescriptor];
+            
             id<MTLCommandQueue> commandQueue = [view.preferredDevice newCommandQueue];
             
             //
@@ -144,8 +194,8 @@
 //            } @finally {
 //                NSLog(@"[[(MTLCaptureManager *)sharedCaptureManager] setCaptureObject:MTLCreateSystemDefaultDevice()]");
 //            }
-            
             //
+            
             return ^ (id<MTLTexture> source_texture) {
                 return ^ (void) {
                     @autoreleasepool {
@@ -170,38 +220,58 @@
                         __autoreleasing MTLRenderPassDescriptor *renderPassDescriptor = view.currentRenderPassDescriptor;
                         renderPassDescriptor.colorAttachments[0].texture = drawableTexture;
                         renderPassDescriptor.colorAttachments[0].loadAction = MTLLoadActionClear;
-                        renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColorMake(0.0,0.0,0.0,1.0);
+                        renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColorMake(0.0, 0.0, 0.0, 1.0);
                         renderPassDescriptor.colorAttachments[0].storeAction = MTLStoreActionStore;
+//                        renderPassDescriptor.renderTargetWidth  = CGRectGetWidth(view.frame);
+//                        renderPassDescriptor.renderTargetHeight = CGRectGetHeight(view.frame);
                         
                         if(renderPassDescriptor != nil)
                         {
+//                            __autoreleasing id<MTLRenderCommandEncoder> renderEncoder = [commandBuffer renderCommandEncoderWithDescriptor:renderPassDescriptor];
+//                            renderEncoder.label = @"MyRenderEncoder";
+//                            [renderEncoder setViewport:(MTLViewport){0.0, 0.0, viewportSize.x, viewportSize.y, -1.0, 1.0}];
+//                            [renderEncoder setRenderPipelineState:renderPipelineState];
+//
+//                            // Encode the vertex data.
+//                            [renderEncoder setVertexBytes:quadVertices
+//                                                   length:sizeof(quadVertices)
+//                                                  atIndex:MetalVertexInputIndexVertices];
+//
+//                            // Encode the viewport data.
+//                            [renderEncoder setVertexBytes:&viewportSize
+//                                                   length:sizeof(viewportSize)
+//                                                  atIndex:MetalVertexInputIndexViewportSize];
+//
+//                            // Encode the output texture
+//                            [renderEncoder setFragmentTexture:computeTexture
+//                                                      atIndex:MetalTextureIndexOutput];
+//
+//                            // Draw the quad
+//                            [renderEncoder drawPrimitives:MTLPrimitiveTypeTriangle
+//                                              vertexStart:0
+//                                              vertexCount:6];
+//
+//                            [renderEncoder endEncoding];
+//                            //
+//                            [commandBuffer presentDrawable:layerDrawable];
+                            
+                            // --- TEST COMMAND ENCODER --- //
+                            
                             __autoreleasing id<MTLRenderCommandEncoder> renderEncoder = [commandBuffer renderCommandEncoderWithDescriptor:renderPassDescriptor];
                             renderEncoder.label = @"MyRenderEncoder";
-                            [renderEncoder setViewport:(MTLViewport){0.0, 0.0, viewportSize.x, viewportSize.y, -1.0, 1.0}];
                             [renderEncoder setRenderPipelineState:renderPipelineState];
-                            
-                            // Encode the vertex data.
-                            [renderEncoder setVertexBytes:quadVertices
-                                                   length:sizeof(quadVertices)
-                                                  atIndex:MetalVertexInputIndexVertices];
-                            
-                            // Encode the viewport data.
-                            [renderEncoder setVertexBytes:&viewportSize
-                                                   length:sizeof(viewportSize)
-                                                  atIndex:MetalVertexInputIndexViewportSize];
-                            
-                            // Encode the output texture
-                            [renderEncoder setFragmentTexture:computeTexture
-                                                      atIndex:MetalTextureIndexOutput];
-                            
-                            // Draw the quad
+                            [renderEncoder setVertexBuffer:vertexCoordBuffer offset:0 atIndex:0];
+                            [renderEncoder setVertexBuffer:textCoordBuffer   offset:0 atIndex:1];
+                            [renderEncoder setFragmentTexture:computeTexture atIndex:0];
+                            [renderEncoder setFragmentSamplerState:samplerState atIndex:0];
                             [renderEncoder drawPrimitives:MTLPrimitiveTypeTriangle
                                               vertexStart:0
                                               vertexCount:6];
-                            
                             [renderEncoder endEncoding];
-                            //
+                            
                             [commandBuffer presentDrawable:layerDrawable];
+                            
+                            // --- -------------------- --- //
                         }
                         
                         [commandBuffer commit];

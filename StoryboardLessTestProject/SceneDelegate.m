@@ -28,8 +28,6 @@
     MetalViewController * metalViewController = [[MetalViewController alloc] init];
     [_window setRootViewController:metalViewController];
     [_window makeKeyAndVisible];
-    
-    
 }
 
 

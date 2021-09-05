@@ -28,6 +28,7 @@
     
     [self.view setDevice:self.view.preferredDevice];
     [self.view setFramebufferOnly:FALSE];
+    [self.view setContentScaleFactor:UIScreen.mainScreen.nativeScale];
     
     [self.view.layer setBackgroundColor:[UIColor grayColor].CGColor];
     ((CAMetalLayer *)self.view.layer).contentsGravity = kCAGravityResizeAspectFill;

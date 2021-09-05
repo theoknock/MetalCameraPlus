@@ -13,6 +13,8 @@
 typedef enum MetalVertexInputIndex
 {
     MetalVertexInputIndexVertices     = 0,
+//    MetalVertexInputIndexOutputSize   = 1,
+//    MetalVertexInputIndexInputSize    = 2,
     MetalVertexInputIndexViewportSize = 1,
 } MetalVertexInputIndex;
 
